@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">Yum Mart</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="menu.html">Menu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="cart.html">Cart</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h2>Menu</h2>
+      <div class="menu-items"></div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="loginRegisterModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="loginRegisterModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loginRegisterModalLabel">
+              Register / Login to view menu and order your favorite items
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>
+              You need to <a href="register.html">register</a> or
+              <a href="login.html">login</a> to view this menu and order your
+              favorite items.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const userId = localStorage.getItem("userId");
+
+        if (!userId) {
+          alert("Please Register/login to view your cart.");
+          window.location.href = "index.html";
+          return;
+        }
+        const isLoggedIn = localStorage.getItem("userData") !== null;
+
+        if (!isLoggedIn) {
+          $("#loginRegisterModal").modal("show");
+        } else {
+          const cartId = `cart_${userId}`;
+          const menuItems = [
+            { id: 1, name: "Burger", price: 150, image: "images/burger.jpg" },
+            { id: 2, name: "Pizza", price: 200, image: "images/pizza.jpg" },
+            {
+              id: 3,
+              name: "ButterChicken",
+              price: 200,
+              image: "images/butterchicken.jpg",
+            },
+            { id: 4, name: "Dosa", price: 200, image: "images/dosa.jpg" },
+            { id: 5, name: "Dhokla", price: 200, image: "images/dhokla.jpg" },
+            { id: 6, name: "Lassi", price: 200, image: "images/lassi.jpg" },
+            {
+              id: 7,
+              name: "Panipuri",
+              price: 200,
+              image: "images/panipuri.jpg",
+            },
+            {
+              id: 8,
+              name: "Rasagulla",
+              price: 200,
+              image: "images/Rasagulla.png",
+            },
+            {
+              id: 9,
+              name: "Thandai",
+              price: 200,
+              image: "images/thandai.jpeg",
+            },
+            {
+              id: 10,
+              name: "Vadapav",
+              price: 200,
+              image: "images/vadapav.jpg",
+            },
+            {
+              id: 11,
+              name: "FilterCoffee",
+              price: 200,
+              image: "images/FilterCoffee.JPG",
+            },
+            {
+              id: 12,
+              name: "AlooParatha",
+              price: 200,
+              image: "images/AlooParatha.jpg",
+            },
+            {
+              id: 13,
+              name: "Biryani",
+              price: 200,
+              image: "images/biriyani.jpg",
+            },
+          ];
+
+          const menuItemsContainer = document.querySelector(".menu-items");
+
+          menuItems.forEach((menuItem) => {
+            const menuItemElement = document.createElement("div");
+            menuItemElement.classList.add("menu-item");
+            menuItemElement.innerHTML = `
+        <h3>${menuItem.name}</h3>
+        <p>Price: ${menuItem.price} RS</p>
+        <img src="${menuItem.image}" alt="${menuItem.name}">
+        <div class="quantity-control">
+          <button class="btn btn-secondary quantity-btn minus">-</button>
+          <input type="text" class="form-control quantity" value="1" readonly>
+          <button class="btn btn-secondary quantity-btn plus">+</button>
+        </div>
+        <button class="btn btn-primary add-to-cart" data-id="${menuItem.id}" data-name="${menuItem.name}" data-price="${menuItem.price}" data-image="${menuItem.image}">Add to Cart</button>
+      `;
+            menuItemsContainer.appendChild(menuItemElement);
+          });
+
+          const addToCartButtons = document.querySelectorAll(".add-to-cart");
+
+          addToCartButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+              const item = {
+                id: parseInt(button.getAttribute("data-id")),
+                name: button.getAttribute("data-name"),
+                price: parseFloat(button.getAttribute("data-price")),
+                quantity: parseInt(
+                  button.parentElement.querySelector(".quantity").value
+                ),
+                image: button.getAttribute("data-image"),
+              };
+              addToCart(item, cartId);
+            });
+          });
+
+          function addToCart(item, cartId) {
+            let cartItems = JSON.parse(localStorage.getItem(cartId)) || [];
+            const existingItemIndex = cartItems.findIndex(
+              (cartItem) => cartItem.id === item.id
+            );
+            if (existingItemIndex !== -1) {
+              cartItems[existingItemIndex].quantity += item.quantity;
+            } else {
+              cartItems.push(item);
+            }
+            localStorage.setItem(cartId, JSON.stringify(cartItems));
+            alert("Item added to cart!");
+          }
+
+          const quantityControls =
+            document.querySelectorAll(".quantity-control");
+          quantityControls.forEach((control) => {
+            const minusBtn = control.querySelector(".minus");
+            const plusBtn = control.querySelector(".plus");
+            const quantityInput = control.querySelector(".quantity");
+
+            minusBtn.addEventListener("click", function () {
+              let currentValue = parseInt(quantityInput.value);
+              if (currentValue > 1) {
+                quantityInput.value = --currentValue;
+              }
+            });
+
+            plusBtn.addEventListener("click", function () {
+              let currentValue = parseInt(quantityInput.value);
+              quantityInput.value = ++currentValue;
+            });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

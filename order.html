@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Order Details</h2>
+      <form id="order-form">
+        <div class="form-group">
+          <label for="fullname">Full Name</label>
+          <input type="text" class="form-control" id="fullname" required />
+        </div>
+        <div class="form-group">
+          <label for="address1">Address Line 1</label>
+          <input type="text" class="form-control" id="address1" required />
+        </div>
+        <div class="form-group">
+          <label for="address2">Address Line 2</label>
+          <input type="text" class="form-control" id="address2" />
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="city">City</label>
+            <input type="text" class="form-control" id="city" required />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="state">State</label>
+            <input type="text" class="form-control" id="state" required />
+          </div>
+          <div class="form-group col-md-2">
+            <label for="zip">ZIP</label>
+            <input type="text" class="form-control" id="zip" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="country">Country</label>
+          <input type="text" class="form-control" id="country" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" class="form-control" id="phone" />
+        </div>
+        <hr />
+        <h3>Payment Details</h3>
+        <div class="form-group">
+          <label for="cardnumber">Credit Card Number</label>
+          <input type="text" class="form-control" id="cardnumber" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="expiry">Expiration Date</label>
+            <input type="text" class="form-control" id="expiry" required />
+          </div>
+          <div class="form-group col-md-6">
+            <label for="cvv">CVV</label>
+            <input type="text" class="form-control" id="cvv" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="billingaddress">Billing Address</label>
+          <input type="text" class="form-control" id="billingaddress" />
+        </div>
+        <hr />
+        <h3>Additional Information</h3>
+        <div class="form-group">
+          <label for="comments">Comments</label>
+          <textarea class="form-control" id="comments" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Place Order</button>
+      </form>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const orderForm = document.getElementById("order-form");
+
+        orderForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const fullname = document.getElementById("fullname").value.trim();
+          const address1 = document.getElementById("address1").value.trim();
+          const city = document.getElementById("city").value.trim();
+          const state = document.getElementById("state").value.trim();
+          const zip = document.getElementById("zip").value.trim();
+          const country = document.getElementById("country").value.trim();
+          const cardnumber = document.getElementById("cardnumber").value.trim();
+          const expiry = document.getElementById("expiry").value.trim();
+          const cvv = document.getElementById("cvv").value.trim();
+
+          if (
+            !fullname ||
+            !address1 ||
+            !city ||
+            !state ||
+            !zip ||
+            !country ||
+            !cardnumber ||
+            !expiry ||
+            !cvv
+          ) {
+            alert("Please fill in all required fields.");
+            return;
+          }
+
+          alert("Your order has been placed successfully!");
+          window.location.href = "index.html";
+        });
+      });
+    </script>
+  </body>
+</html>

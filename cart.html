@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cart</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container">
+        <a class="navbar-brand" href="#">Yum Mart</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="menu.html">Menu</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="contact.html">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="login.html">Login</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="cart.html">Cart</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h2>Shopping Cart</h2>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Total</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="cart-items"></tbody>
+      </table>
+      <button class="btn btn-primary order-btn">Place Order</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        function displayCartItems() {
+          const userId = localStorage.getItem("userId");
+          if (!userId) {
+            alert("Please Register/login to view your cart.");
+            window.location.href = "index.html";
+            return;
+          }
+          const userCartItems =
+            JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+          const cartItemsContainer = document.getElementById("cart-items");
+          cartItemsContainer.innerHTML = "";
+          userCartItems.forEach((item) => {
+            const itemName = item.name || "";
+            const itemPrice = item.price || 0;
+            const itemQuantity = item.quantity || 0;
+            const itemTotal = itemPrice * itemQuantity;
+            const itemImage = item.image || "";
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                        <td>
+                            <img src="${itemImage}" alt="${itemName}" style="width: 100px; height: 100px;">
+                            ${itemName}
+                        </td>
+                        <td>${itemPrice.toFixed(2)} RS</td>
+                        <td>${itemQuantity}</td>
+                        <td>${itemTotal.toFixed(2)} RS</td>
+                        <td>
+                            <button class="btn btn-danger remove-item" data-name="${itemName}">Remove</button>
+                        </td>
+                    `;
+            cartItemsContainer.appendChild(row);
+          });
+        }
+
+        document.addEventListener("click", function (event) {
+          if (event.target.classList.contains("remove-item")) {
+            const itemName = event.target.getAttribute("data-name");
+            removeItemFromCart(itemName);
+          }
+        });
+
+        function removeItemFromCart(itemName) {
+          const userId = localStorage.getItem("userId");
+          let userCartItems =
+            JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
+          userCartItems = userCartItems.filter(
+            (item) => item.name !== itemName
+          );
+          localStorage.setItem(`cart_${userId}`, JSON.stringify(userCartItems));
+          displayCartItems();
+        }
+
+        displayCartItems();
+
+        document
+          .querySelector(".order-btn")
+          .addEventListener("click", function () {
+            alert("Order placed successfully!");
+
+            const userId = localStorage.getItem("userId");
+            localStorage.removeItem(`cart_${userId}`);
+            displayCartItems();
+          });
+      });
+    </script>
+  </body>
+</html>
